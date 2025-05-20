@@ -36,7 +36,7 @@ export default function RecordPage() {
     }
 
     mediaRecorder.onstop = async () => {
-      const audioBlob = new Blob(audioChunks)
+      const audioBlob = new Blob(audioChunks, { type: "audio/mp4" }) 
       const formData = new FormData()
       formData.append("file", audioBlob, "audio.webm")
 
