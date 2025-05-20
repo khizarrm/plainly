@@ -9,13 +9,46 @@ export default function RecordPage() {
   const [isRecording, setIsRecording] = useState(false)
   const [isProcessing, setIsProcessing] = useState(false)
   const [volume, setVolume] = useState(0)
+  const [isIOS, setIsIOS] = useState(false)
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null)
   const audioChunksRef = useRef<Blob[]>([])
   const analyserRef = useRef<AnalyserNode | null>(null)
   const animationRef = useRef(0)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const router = useRouter()
+
+  useEffect(() => {
+    const ua = window.navigator.userAgent
+    if (/iPad|iPhone|iPod/.test(ua)) {
+      setIsIOS(true)
+    }
+  }, [])
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsProcessing(true)
+
+    const formData = new FormData()
+    formData.append("file", file, file.name)
+
+    const res = await fetch("/api/whisper", {
+      method: "POST",
+      body: formData,
+    })
+
+    if (!res.ok) {
+      console.error("Transcription failed")
+      return
+    }
+
+    const data = await res.json()
+    localStorage.setItem("translationResult", JSON.stringify(data))
+    router.push("/results")
+  }
 
   const startRecording = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
@@ -25,25 +58,14 @@ export default function RecordPage() {
       if (event.data.size > 0) audioChunks.push(event.data)
     }
 
-    const handleLimitCheck = () => {
-      const usageCount = parseInt(localStorage.getItem("usageCount") || "0")
-      if (usageCount >= 5) {
-        alert("You’ve hit your free limit. Come back tomorrow!")
-        return false
-      }
-      localStorage.setItem("usageCount", String(usageCount + 1))
-      return true
-    }
-
     mediaRecorder.onstop = async () => {
-      const audioBlob = new Blob(audioChunks, { type: "audio/wav" }) 
+      const audioBlob = new Blob(audioChunks, { type: "audio/wav" })
       const formData = new FormData()
       formData.append("file", audioBlob, "audio.wav")
 
       const url = URL.createObjectURL(audioBlob)
       const audio = new Audio(url)
       audio.play()
-
 
       const res = await fetch("/api/whisper", {
         method: "POST",
@@ -95,7 +117,6 @@ export default function RecordPage() {
     const lastUsedDate = localStorage.getItem("usageDate")
     let usageCount = parseInt(localStorage.getItem("usageCount") || "0")
 
-    // Reset count if it's a new day
     if (lastUsedDate !== today) {
       usageCount = 0
       localStorage.setItem("usageCount", "0")
@@ -110,11 +131,14 @@ export default function RecordPage() {
         alert("You’ve hit your free limit for today. Try again tomorrow!")
         return
       }
-      startRecording()
+
+      if (isIOS && fileInputRef.current) {
+        fileInputRef.current.click()
+      } else {
+        startRecording()
+      }
     }
   }
-
-
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center justify-center bg-black text-white px-4">
@@ -147,6 +171,16 @@ export default function RecordPage() {
             ? "Tap again to stop recording"
             : "Tap to start recording"}
         </p>
+
+        {/* iOS fallback input */}
+        <input
+          type="file"
+          accept="audio/*"
+          capture="user"
+          ref={fileInputRef}
+          className="hidden"
+          onChange={handleFileChange}
+        />
       </div>
     </div>
   )
