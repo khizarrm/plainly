@@ -27,6 +27,7 @@ export default function RecordPage() {
   }, [])
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    
     const file = e.target.files?.[0]
     if (!file) return
 
@@ -44,6 +45,10 @@ export default function RecordPage() {
       console.error("Transcription failed")
       return
     }
+
+    console.log("file type:", file.type)
+    console.log("file name:", file.name)
+
 
     const data = await res.json()
     localStorage.setItem("translationResult", JSON.stringify(data))
@@ -176,7 +181,6 @@ export default function RecordPage() {
         <input
           type="file"
           accept="audio/*"
-          capture="user"
           ref={fileInputRef}
           className="hidden"
           onChange={handleFileChange}
