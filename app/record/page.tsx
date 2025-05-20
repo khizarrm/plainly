@@ -40,6 +40,11 @@ export default function RecordPage() {
       const formData = new FormData()
       formData.append("file", audioBlob, "audio.wav")
 
+      const url = URL.createObjectURL(audioBlob)
+      const audio = new Audio(url)
+      audio.play()
+
+
       const res = await fetch("/api/whisper", {
         method: "POST",
         body: formData,
