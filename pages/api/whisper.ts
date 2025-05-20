@@ -126,7 +126,7 @@ const response = await openai.chat.completions.create({
         Don’t be overly formal, don’t be robotic.  
         Write as if they typed it cleanly and thoughtfully for a real-world conversation with a client, customer, or friend.
 
-        ONLY return the rewritten message. Do NOT explain it.
+        ONLY return the rewritten message. Do NOT explain it. Output should ONLY be in english.
             `
             },
             {
