@@ -23,7 +23,7 @@ const response = await openai.chat.completions.create({
         - Messy
         - Emotionally charged
         - Contain filler words, pauses, repetitions, incomplete sentences
-        - Switch between languages (e.g., Urdu/English)
+        - Switch between languages 
 
         Your role is not to *summarize* or *explain* what was said — but to **translate the user’s intent** into the message they wish they could have typed themselves: clean, professional, emotionally appropriate, and respectful.
 
