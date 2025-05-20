@@ -36,9 +36,9 @@ export default function RecordPage() {
     }
 
     mediaRecorder.onstop = async () => {
-      const audioBlob = new Blob(audioChunks, { type: "audio/mp4" }) 
+      const audioBlob = new Blob(audioChunks, { type: "audio/wav" }) 
       const formData = new FormData()
-      formData.append("file", audioBlob, "audio.mp4")
+      formData.append("file", audioBlob, "audio.wav")
 
       const res = await fetch("/api/whisper", {
         method: "POST",
