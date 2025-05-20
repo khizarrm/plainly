@@ -1,10 +1,10 @@
-# 🗣️ TalkTranslate (or LucidSpeak, etc.)
+# 🗣️ Plainly
 
 > Speak freely. We'll turn it into clear, professional English — no matter how messy it starts.
 
-TalkTranslate is an AI-powered voice-to-text web app that helps users — especially non-native English speakers — turn unstructured or emotional speech into polished, polite, and client-ready messages.
+Plainly is an AI-powered voice-to-text web app that helps users — especially non-native English speakers — turn unstructured or emotional speech into polished, polite, and client-ready messages.
 
-Whether you're speaking in Urdu, English, or switching mid-sentence... even if you're ranting, stumbling, or using slang — TalkTranslate listens, understands your intent, and rewrites it into something you’d actually want to send.
+Whether you're speaking in Urdu, English, or switching mid-sentence... even if you're ranting, stumbling, or using slang — Plainly listens, understands your intent, and rewrites it into something you’d actually want to send.
 
 ---
 
@@ -42,10 +42,3 @@ Whether you're speaking in Urdu, English, or switching mid-sentence... even if y
 
 ---
 
-## 📦 Installation
-
-```bash
-git clone https://github.com/your-username/talktranslate.git
-cd talktranslate
-npm install
-npm run dev
